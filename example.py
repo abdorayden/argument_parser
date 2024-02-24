@@ -26,7 +26,6 @@ def pizza():
 def music():
     print("Hello music")
 
-#print(_psr.my_args)
 if __name__ == "__main__":
     if len(_psr.args) < 2:
         _psr.help_message()
