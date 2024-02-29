@@ -18,9 +18,6 @@ parser = Parser(description="This is a sample parser.", banner="Sample Parser")
 def print_name(name: str) -> None:
     print(f"Hello, {name}!")
 
-# parse the command line arguments
-parser.parse()
-
 # print the help message if the custom argument is not present
 if "-h" not in parser.args and "--help" not in parser.args:
     parser.help_message()
