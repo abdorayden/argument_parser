@@ -3,26 +3,24 @@
 from parser import Parser
 
 _psr = Parser()
-_psr.add_argument("-h" , "--help", help_ ="show help message")
-_psr.add_argument("-l" , "--low", help_ = "hello message")
-_psr.add_argument("-p" , "--pizza", help_ = "hello pizza")
-_psr.add_argument("-m" , "--music", help_ = "hello music")
 
-@_psr.parse("-h" , "--help")
+@_psr.add_argument("-h" , "--help", help_ ="show help message")
 def help():
     _psr.help_message()
 
-@_psr.parse("-l" , "--low")
-def sathello():
-    print("Hello World")
+# if the argument have value u need to add parameter of value for your arg
+@_psr.add_argument("-l" , "--low", help_ = "hello message" , need_value = True)
+def sathello(value):
+    print(value)
+    print("hello world")
 
-@_psr.parse("-p" , "--pizza")
+@_psr.add_argument("-p" , "--pizza", help_ = "hello pizza")
 def pizza():
     print("Hello pizza")
     #print(parser.values["-p"])
 
 
-@_psr.parse("-m" , "--music")
+@_psr.add_argument("-m" , "--music", help_ = "hello music")
 def music():
     print("Hello music")
 

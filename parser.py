@@ -3,6 +3,8 @@
 # import the necessary module for argument parsing
 import sys
 
+class ParserError(Exception):
+    pass
 # define the Parser class
 class Parser(object):
     # initialize the Parser object with a description, banner, and custom help message
@@ -18,24 +20,26 @@ class Parser(object):
         self.description = description
         # initialize an empty dictionary to store the argument values
         self.values = {}
-
-    # add a custom argument to the Parser object
-    def add_argument(self, *args: str, help_: str = "", need_value: bool = False) -> None:
-        # append the custom argument to the list of custom arguments
-        self.my_args.append(tuple(args) + (help_,))
-        # if the argument requires a value, store the value in the dictionary
-        if need_value:
-            self.values[args[0] if len(args) == 1 else args[0] or args[1]] = self.args[self.args.index(args[0] or args[1]) + 1]
-
     # define a decorator function to check if the custom argument is present in the command line arguments
-    def parse(self, *args: str):
+    def add_argument(self, *args_: tuple, help_: str = "", need_value: bool = False) -> None:
+    #def parse(self, *args_: str):
+        self.my_args.append(tuple(args_) + (help_,))
         # define the decorator function
         def decf(fn):
             # define the wrapper function
             def wrapper(*ar, **kw):
                 # if any of the specified arguments are present in the command line arguments, call the function
-                if any(val in self.args for val in args if len(args) > 1):
-                    fn(*ar, **kw)
+                if any(val in self.args for val in args_ if len(args_) > 1):
+                    if need_value:
+                        try :
+                            if self.args[args_.index(args_[0]) + 2].startswith("-") :
+                                raise ParserError
+                            self.values.update((_arg , self.args[args_.index(args_[0]) + 2]) for _arg in list(args_) )#if len(args_) > 1 else args_[0])
+                            fn( self.values[list(args_)[0]], *ar, **kw)
+                        except IndexError :
+                            raise ParserError
+                    else :
+                        fn(*ar, **kw)
             # return the wrapper function
             return wrapper
         # return the decorator function
