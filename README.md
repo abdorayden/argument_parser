@@ -11,23 +11,21 @@ The Parser class in the provided code is designed to parse command line argument
 Here is an example of how to use the Parser class:
 ```python
 # create a Parser object with a description and banner
-parser = Parser(description="This is a sample program that uses the Parser class.", banner="Sample Program")
+parser = Parser(description="This is a sample parser.", banner="Sample Parser")
 
-# add custom arguments to the Parser object
-parser.add_argument("-v", "--verbose", help="Enable verbose output.", need_value=False)
-parser.add_argument("-n", "--name", help="Specify the name of the person.", need_value=True)
+# define a function that will be called when the custom argument is present
+@parser.add_argument("-n", "--name", help="Your name.", need_value=True)
+def print_name(name: str) -> None:
+    print(f"Hello, {name}!")
 
-# define a function that will be called if the "-v" or "--verbose" argument is present
-@parser.parse("-v", "--verbose")
-def verbose_mode():
-    print("Verbose mode is enabled.")
+# parse the command line arguments
+parser.parse()
 
-# define a function that will be called if the "-n" or "--name" argument is present
-@parser.parse("-n", "--name")
-def print_name():
-    print(f"Hello, {parser.values['-n'] or parser.values['--name']}!")
-
-# print the help message
-parser.help_message()
+# print the help message if the custom argument is not present
+if "-h" not in parser.args and "--help" not in parser.args:
+    parser.help_message()
+# or 
+ if len(_psr.args) < 2:
+        _psr.help_message()
 ```
 In this example, the `verbose_mode` function is called if the `-v` or `--verbose` argument is present in the command line arguments. The `print_name` function is called if the `-n` or `--name` argument is present in the command line arguments. The `help_message` method is called to print the help message for the `Parser` object.
